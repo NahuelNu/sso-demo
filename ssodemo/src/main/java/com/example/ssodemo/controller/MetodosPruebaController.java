@@ -5,12 +5,12 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
+import java.util.List;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -34,6 +34,8 @@ public class MetodosPruebaController {
         return new String("Ingresaste: ");
     }
 
+    // Usuario quiere autenticarse en un sistema a través del sso-proxy
+    // sso-proxy redirecciona al login del IdP
     @GetMapping("/test/login")
     public void initiateLogin(HttpServletResponse response) throws IOException {
         // "http://localhost:6080/realms/realmTest/protocol/openid-connect/auth?client_id=sso-proxy&redirect_uri=http://localhost:8080/test/callback&response_type=code&scope=openid";
@@ -48,6 +50,8 @@ public class MetodosPruebaController {
                                     .build().toUriString();
         response.sendRedirect(authorizationUri);
     }
+
+    // Recibe respuesta del IdP  
     @GetMapping("/test/callback")
     public String handleCallback(@RequestParam String code, @RequestParam String state) throws IOException {
         // Verificar el estado (CSRF protection)
@@ -55,17 +59,14 @@ public class MetodosPruebaController {
             throw new IllegalStateException("Estado inválido");
         }
 
-       
-
         // Intercambiar el código por tokens
         OAuth2AccessTokenResponse tokenResponse = this.exchangeCodeForTokens(code);
+
+
         return "Code: "+code+" state: "+state + " ---------- "+ tokenResponse.getAccessToken().getTokenValue();
-        // // Agregar los tokens al modelo o establecer cookies/sesiones
-        // model.addAttribute("idToken", tokenResponse.getIdToken());
-        // model.addAttribute("accessToken", tokenResponse.getAccessToken());
 
         // // Redirigir al usuario a la aplicación cliente
-        // return "redirect:https://cliente-app.com/home";s
+        // return "redirect:https://cliente-app.com/home";
     }
 
     private OAuth2AccessTokenResponse exchangeCodeForTokens(String code) {
@@ -98,13 +99,18 @@ public class MetodosPruebaController {
         
             // Verificación del código de estado y manejo de la respuesta
             if (response.getStatusCode() == HttpStatus.OK) {
-                Map<String, Object> tokens = response.getBody();
+                Map<String, Object> bodyResponse = response.getBody();
 
-                String accessToken = (String) tokens.get("access_token");
-                String refreshToken = (String) tokens.get("refresh_token");
+                String accessToken = (String) bodyResponse.get("access_token");
+                String refreshToken = (String) bodyResponse.get("refresh_token");
 
-                // for (Map.Entry<String, Object> entrada : tokens.entrySet()) {
-                //     System.out.println("Clave: " + entrada.getKey() + ", Valor: " + entrada.getValue());
+                // for (Map.Entry<String, Object> entrada : bodyResponse.entrySet()) {
+                //     System.out.println("Clave: " + entrada.getKey() + ", Valor: " /*+ entrada.getValue()*/);
+                // }
+                
+                // HttpHeaders headersResponse = response.getHeaders();
+                // for (Map.Entry<String, List<String>> header : headersResponse.entrySet()) {
+                //     System.out.println("Header: " + header.getKey() + ", Valores: " + header.getValue());
                 // }
 
                 OAuth2AccessTokenResponse oAuth2AccessTokenResponse= 
@@ -125,3 +131,4 @@ public class MetodosPruebaController {
 
     
 }
+    
