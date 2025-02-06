@@ -17,6 +17,7 @@ import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAu
  * 
  * @TODO 
  * Credenciales y urldeben ser extraidas de variables de entorno
+ * Manejo de excepciones
  * 
  * 
  * Componentes principales:
@@ -34,7 +35,7 @@ public class LdapConfig {
      * Configura la fuente de contexto LDAP (LDAP Context Source) necesaria para conectarse al servidor LDAP.
      * 
      * @return Un objeto {@link DefaultSpringSecurityContextSource} que contiene la URL del servidor LDAP, 
-     *         el DN (Distinguished Name) del usuario de administración y la contraseña.
+     *         el DN (Distinguished Name) del usuario admin y la contraseña.
      */
     @Bean
     public DefaultSpringSecurityContextSource contextSource() {
