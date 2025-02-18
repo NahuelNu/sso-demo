@@ -79,6 +79,7 @@ public class AuthServerConfig {
 			.authorizeHttpRequests((authorize) -> authorize
 				.anyRequest().authenticated()
 			)
+			.csrf(csrf -> csrf.disable()) // Deshabilitar solo en dev
             // El formulario de login gestiona la redirección a la página de login desde 
             // el filter chain del servidor de autorización.
 			.formLogin(Customizer.withDefaults());
@@ -100,20 +101,21 @@ public class AuthServerConfig {
 
 	@Bean 
 	public RegisteredClientRepository registeredClientRepository() {
-		RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
-				.clientId("oidc-client")
+		RegisteredClient testClient = RegisteredClient.withId(UUID.randomUUID().toString())
+				.clientId("test-client")
 				.clientSecret("{noop}secret")
 				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
 				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
 				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-				.redirectUri("http://127.0.0.1:8080/login/oauth2/code/oidc-client")
-				.postLogoutRedirectUri("http://127.0.0.1:8080/")
+				.redirectUri("http://127.0.0.1:8080/login/oauth2/code/test-client")
+				.redirectUri("http://127.0.0.1:8080/authorized")
+				.postLogoutRedirectUri("http://127.0.0.1:8080/logout")
 				.scope(OidcScopes.OPENID)
 				.scope(OidcScopes.PROFILE)
-				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
 				.build();
 
-		return new InMemoryRegisteredClientRepository(oidcClient);
+		return new InMemoryRegisteredClientRepository(testClient);
 	}
 
 	@Bean 

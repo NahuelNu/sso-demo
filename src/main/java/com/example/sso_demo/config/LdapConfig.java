@@ -16,7 +16,7 @@ import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAu
  * y se proporciona un usuario administrador para la autenticación.
  * 
  * @TODO 
- * Credenciales y urldeben ser extraidas de variables de entorno
+ * Credenciales y url deben ser extraidas de variables de entorno
  * Manejo de excepciones
  * 
  * 
@@ -56,6 +56,6 @@ public class LdapConfig {
     @Bean
     public ActiveDirectoryLdapAuthenticationProvider authenticationProvider() {
         // dominio , url 
-        return new ActiveDirectoryLdapAuthenticationProvider("example.local", "ldap://192.168.100.24:389");
+        return new ActiveDirectoryLdapAuthenticationProvider("example.local", "ldap://192.168.100.34:389");
     }
 }
