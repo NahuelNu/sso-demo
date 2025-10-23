@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Página de bienvenida</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 2em;
+      }
+      .msg {
+        padding: 1em;
+        background: #e0ffe0;
+        border: 1px solid #00aa00;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Bienvenido</h1>
+
+    <div th:if="${message}" class="msg">
+      <p th:text="${message}"></p>
+    </div>
+
+    <p>Ya estás autenticado en el sistema.</p>
+  </body>
+</html>

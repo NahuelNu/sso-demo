@@ -40,7 +40,8 @@ public class LdapConfig {
     @Bean
     public DefaultSpringSecurityContextSource contextSource() {
         // Establece la URL del servidor LDAP con su dominio base (base DN)
-        DefaultSpringSecurityContextSource contextSource = new DefaultSpringSecurityContextSource("ldap://192.168.100.24:389/dc=example,dc=local");
+        DefaultSpringSecurityContextSource contextSource = 
+            new DefaultSpringSecurityContextSource("ldap://192.168.100.34:389/dc=example,dc=local");
         // Usuario y contraseña de un admin 
         contextSource.setUserDn("cn=agustin,dc=example,dc=local"); 
         contextSource.setPassword("agustin"); 
@@ -56,6 +57,12 @@ public class LdapConfig {
     @Bean
     public ActiveDirectoryLdapAuthenticationProvider authenticationProvider() {
         // dominio , url 
-        return new ActiveDirectoryLdapAuthenticationProvider("example.local", "ldap://192.168.100.34:389");
+        ActiveDirectoryLdapAuthenticationProvider provider =
+            new ActiveDirectoryLdapAuthenticationProvider("example.local", "ldap://192.168.100.34:389");
+
+        provider.setConvertSubErrorCodesToExceptions(true); 
+        provider.setUseAuthenticationRequestCredentials(true);
+
+        return provider;
     }
 }

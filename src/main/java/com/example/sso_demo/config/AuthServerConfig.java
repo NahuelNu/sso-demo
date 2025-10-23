@@ -82,7 +82,9 @@ public class AuthServerConfig {
 			.csrf(csrf -> csrf.disable()) // Deshabilitar solo en dev
             // El formulario de login gestiona la redirección a la página de login desde 
             // el filter chain del servidor de autorización.
-			.formLogin(Customizer.withDefaults());
+			.formLogin(form -> form
+			.defaultSuccessUrl("/welcome?login=ok", false)
+            .failureUrl("/login?error"));
 
 		return http.build();
 	}
