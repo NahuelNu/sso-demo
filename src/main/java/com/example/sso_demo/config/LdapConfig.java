@@ -40,6 +40,7 @@ public class LdapConfig {
     @Bean
     public DefaultSpringSecurityContextSource contextSource() {
         // Establece la URL del servidor LDAP con su dominio base (base DN)
+        // Ip es la del zentyal server
         DefaultSpringSecurityContextSource contextSource = 
             new DefaultSpringSecurityContextSource("ldap://192.168.100.34:389/dc=example,dc=local");
         // Usuario y contraseña de un admin 

@@ -83,23 +83,25 @@ public class AuthServerConfig {
             // El formulario de login gestiona la redirección a la página de login desde 
             // el filter chain del servidor de autorización.
 			.formLogin(form -> form
-			.defaultSuccessUrl("/welcome?login=ok", false)
-            .failureUrl("/login?error"));
+				.defaultSuccessUrl("/welcome?login=ok", false)
+            	.failureUrl("/login?error")
+			);
 
 		return http.build();
 	}
 
-	@Bean 
-	public UserDetailsService userDetailsService() {
-		@SuppressWarnings("deprecation")
-        UserDetails userDetails = User.withDefaultPasswordEncoder()
-				.username("user")
-				.password("password")
-				.roles("USER")
-				.build();
+	// Comentar para utilizar conexión LDAP
+	// @Bean 
+	// public UserDetailsService userDetailsService() {
+	// 	@SuppressWarnings("deprecation")
+    //     UserDetails userDetails = User.withDefaultPasswordEncoder()
+	// 			.username("user")
+	// 			.password("password")
+	// 			.roles("USER")
+	// 			.build();
 
-		return new InMemoryUserDetailsManager(userDetails);
-	}
+	// 	return new InMemoryUserDetailsManager(userDetails);
+	// }
 
 	@Bean 
 	public RegisteredClientRepository registeredClientRepository() {
